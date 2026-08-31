@@ -971,7 +971,20 @@ function init() {
   ScrollTrigger.refresh();
 }
 
-addEventListener('load', init);
+/* The headline is split into lines and each line is masked, so the split has
+   to be measured against the real face. `.display` sizes itself in `ch`, which
+   is the font's own zero-advance, so the box is a different width before
+   Shippori arrives than after it: split too early and the wrap is locked in
+   against the fallback's metrics and never corrected.
+
+   It does not show on a build whose fonts are inlined as data URIs, because
+   they are there on the first frame. It shows immediately on one that fetches
+   them, where `load` can fire with the face still in flight. `fonts.ready`
+   settles either way, and resolves even when a font fails, so nothing hangs. */
+addEventListener('load', () => {
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(init);
+  else init();
+});
 
 /* re-split the headlines and re-measure the pins after a resize settles */
 let resizeTimer;
