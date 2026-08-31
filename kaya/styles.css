@@ -1,0 +1,940 @@
+/* ============================================================================
+   KAYA, an onsen ryokan in the Onodani valley
+   ----------------------------------------------------------------------------
+   CREATIVE DIRECTION (the contract the whole build obeys)
+
+   Mood        quiet, warm, unhurried, exact. A ryokan is precise hospitality:
+               exact temperatures, exact hours, and almost no noise.
+   Palette     the hero's own dusk plum (#3C2C36) as the dark ground, warm
+               paper as the light ground, ONE accent taken from the blossom
+               in the hero (#E8A0AF on dark, #B4667A on paper).
+   Type        Shippori Mincho for display, a mincho serif whose Latin carries
+               the same flared, slightly brushed feel as its kanji. Lexend,
+               already local to the hero, for micro-labels and body.
+   Motion      ONE easing: expo.out / cubic-bezier(.16,1,.3,1). Reveal 1.15s.
+               Lenis duration 1.4, deliberately heavy and drifting.
+   Chapters    the page alternates paper and plum. The flip between them is
+               the chapter device, so sections are opaque and cut hard, softened
+               only by a short gradient bleed at each dark section's top edge.
+   ========================================================================== */
+
+/* ── fonts ────────────────────────────────────────────────────────────────
+   Latin subsets only. The two kanji on the page fall through to the system
+   mincho, which on macOS is Hiragino and is better than anything subsetting
+   would buy us. */
+@font-face {
+  font-family: 'Shippori Mincho';
+  src: url('assets/fonts/shippori-mincho-400-latin.woff2') format('woff2');
+  font-weight: 400; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: 'Shippori Mincho';
+  src: url('assets/fonts/shippori-mincho-500-latin.woff2') format('woff2');
+  font-weight: 500; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: 'Shippori Mincho';
+  src: url('assets/fonts/shippori-mincho-600-latin.woff2') format('woff2');
+  font-weight: 600; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: 'Lexend';
+  src: url('inner-green-assets/lexend-latin.woff2') format('woff2');
+  font-weight: 100 900; font-style: normal; font-display: swap;
+}
+
+/* ── tokens ─────────────────────────────────────────────────────────────── */
+:root {
+  --plum:        #3C2C36;
+  --plum-deep:   #241A20;
+  --plum-ink:    #171116;
+  --paper:       #EFE9E3;
+  --paper-2:     #E4DBD2;
+  --ink:         #241B21;
+  --ink-soft:    rgba(36, 27, 33, .58);
+  --ink-faint:   rgba(36, 27, 33, .38);
+  --cream:       #F4EFEA;
+  --cream-soft:  rgba(244, 239, 234, .58);
+  --cream-faint: rgba(244, 239, 234, .34);
+  --blossom:     #E8A0AF;
+  --blossom-deep:#B4667A;
+  --rule-dark:   rgba(244, 239, 234, .14);
+  --rule-light:  rgba(36, 27, 33, .14);
+
+  --font-display: 'Shippori Mincho', 'Hiragino Mincho ProN', 'Yu Mincho', Georgia, serif;
+  --font-ui: 'Lexend', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+
+  --step--2: clamp(.62rem, .6rem + .1vw, .7rem);
+  --step--1: clamp(.8rem, .77rem + .15vw, .92rem);
+  --step-0:  clamp(1rem, .96rem + .2vw, 1.12rem);
+  --step-1:  clamp(1.15rem, 1.05rem + .45vw, 1.45rem);
+  --step-3:  clamp(1.9rem, 1.4rem + 2.2vw, 3.2rem);
+  --step-5:  clamp(2.6rem, 1.5rem + 4.6vw, 5.6rem);
+  --step-7:  clamp(3.6rem, 1.4rem + 9vw, 11rem);
+
+  /* ONE motion personality. Mirrored in main.js as EASE / REVEAL. */
+  --ease: cubic-bezier(.16, 1, .3, 1);
+  --dur-reveal: 1.15s;
+
+  --grain-opacity: .05;
+  --gutter: clamp(1.5rem, 5vw, 6rem);
+  --measure: 34ch;
+}
+
+/* ── reset ──────────────────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--plum);
+  color: var(--cream);
+  font-family: var(--font-ui);
+  font-weight: 300;
+  font-size: var(--step-0);
+  line-height: 1.6;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+h1, h2, h3, p, figure, ul, dl, dd { margin: 0; }
+ul { padding: 0; list-style: none; }
+img { display: block; max-width: 100%; }
+a { color: inherit; }
+em { font-style: normal; }
+::selection { background: var(--blossom); color: var(--plum-ink); }
+
+/* the cursor is replaced on fine pointers only; main.js adds the class */
+body.has-cursor,
+body.has-cursor a,
+body.has-cursor button { cursor: none; }
+
+/* ── atmosphere ─────────────────────────────────────────────────────────── */
+.grain {
+  position: fixed; inset: 0; z-index: 9998; pointer-events: none;
+  opacity: var(--grain-opacity); mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.86' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* a thin ring, the luxury variant: it follows with weight and never fills */
+.cursor {
+  position: fixed; top: 0; left: 0; z-index: 9997;
+  width: 34px; height: 34px; margin: -17px 0 0 -17px;
+  border: 1px solid var(--cream-faint); border-radius: 50%;
+  pointer-events: none; opacity: 0;
+  transition: width .5s var(--ease), height .5s var(--ease),
+              margin .5s var(--ease), border-color .5s var(--ease), opacity .4s;
+  mix-blend-mode: difference;
+}
+.cursor.is-visible { opacity: 1; }
+.cursor.is-hover { width: 58px; height: 58px; margin: -29px 0 0 -29px; border-color: var(--blossom); }
+
+/* ── loader: fade in from black, a rule that fills, a count ─────────────── */
+.loader {
+  position: fixed; inset: 0; z-index: 9999;
+  background: #0B080B;
+  display: grid; place-items: center;
+}
+.loader__inner {
+  display: grid; justify-items: center; gap: 1.15rem;
+  color: var(--cream);
+}
+.loader__mark {
+  font-family: var(--font-display); font-size: 2.6rem; line-height: 1;
+  opacity: .5;
+  transition: color .8s var(--ease), opacity .8s var(--ease), text-shadow .8s var(--ease);
+}
+.loader__name {
+  font-family: var(--font-ui); font-size: var(--step--2); font-weight: 300;
+  letter-spacing: .58em; text-indent: .58em; text-transform: uppercase;
+  color: var(--cream-soft);
+  transition: color .8s var(--ease);
+}
+/* the count lands on 100 and the mark takes the accent. Colour and opacity
+   only, so the block still does not move at any point in the loader. */
+.loader.is-done .loader__mark {
+  color: var(--blossom); opacity: 1;
+  text-shadow: 0 0 26px rgba(232, 160, 175, .45);
+}
+.loader.is-done .loader__name { color: var(--blossom); }
+.loader__rule { display: block; width: min(38vw, 320px); height: 1px; background: var(--rule-dark); }
+.loader__rule i { display: block; height: 100%; width: 0; background: var(--blossom); }
+/* Neither Shippori Mincho nor Lexend ships a tnum feature, so
+   font-variant-numeric: tabular-nums is silently ignored and the digits stay
+   proportional: "1" is 10% narrower than "8". The string's width therefore
+   changed on almost every tick, and because .loader__inner centres its
+   children the whole counter slid about 1.4px from side to side, the entire
+   way from 000 to 100. Each digit gets its own fixed cell instead. 1.1ch, not
+   1ch, because ch is the advance of "0" and "8" is a little wider than that. */
+.loader__count {
+  display: flex;
+  font-family: var(--font-display); font-size: var(--step--1);
+  color: var(--cream-faint);
+}
+.loader__count i {
+  display: block; width: 1.1ch;
+  font-style: normal; text-align: center;
+}
+
+/* ── hero: the ThreeUI Sakura Sunset scene, in its own frame ──────────────
+   The hero sticks through .hero-track while the camera flies forward. It is
+   NOT a ScrollTrigger pin: a pin wraps its element in a .pin-spacer, and
+   reparenting an <iframe> makes the browser navigate it a second time, which
+   rebooted the scene part way through its intro.
+
+   Chapter 01 sits at z-index 0 underneath the frame; the frame's own ground is
+   wound to transparent at the end of the dive so the chapter comes up through
+   the blossom rather than the blossom fading out over it. */
+/* main.js extends the track to (100 + DIVE_LENGTH)svh. The 100svh here is the
+   correct height with no JS and under reduced motion. */
+.hero-track { position: relative; height: 100svh; }
+.hero {
+  position: sticky; top: 0; z-index: 0;
+  height: 100svh; width: 100%;
+  overflow: hidden;
+  background: var(--plum);
+}
+.hero__frame {
+  position: absolute; inset: 0; z-index: 1;
+  display: block; width: 100%; height: 100%; border: 0;
+  background: transparent;
+}
+.hero__into {
+  position: absolute; inset: 0; z-index: 0;
+  display: grid; grid-template-rows: auto 1fr;
+  padding: clamp(5.5rem, 13vh, 9rem) var(--gutter) clamp(2.5rem, 6vh, 4rem);
+  background: var(--plum);
+}
+/* The valley-and-rotenburo photograph is revealed beneath the 3D canopy. Plum
+   remains on .hero__into underneath so the scene's ground can dissolve into it
+   seamlessly. It is its own element rather than a background on .hero__into so
+   the exit parallax has something it can transform, and it is inset top and
+   bottom so that travel never exposes an edge. */
+.hero__photo {
+  position: absolute; inset: -9% 0; z-index: 0;
+  overflow: hidden;
+  /* kept underneath the film, so a video that never loads degrades to the
+     still rather than to a hole */
+  background: url('assets/img/arrival-v2.png') center / cover no-repeat;
+  will-change: transform;
+}
+.hero__photo video {
+  width: 100%; height: 100%; object-fit: cover; display: block;
+}
+/* The film is lit from behind the steam, so its lower half runs far brighter
+   than the still it replaced and the type sitting there gave out. This is a
+   scrim, which the section had deliberately gone without, but it is confined
+   to the bottom: it is fully clear through the upper half, which is where the
+   dive lands and the one place the original objection applies. */
+.hero__photo::after {
+  content: ''; position: absolute; inset: 0; pointer-events: none;
+  background: linear-gradient(180deg,
+    rgba(14, 9, 13, 0) 48%,
+    rgba(14, 9, 13, .3) 72%,
+    rgba(14, 9, 13, .6) 100%);
+}
+
+/* No scrim. The photograph is what the dive lands on, so dulling it would mean
+   the branch dissolves into something already flattened. The type is held up
+   by its own shadow instead, which costs the image nothing. */
+/* the photograph must keep its own position:absolute, so it is excluded here
+   rather than relying on source order. Same trap as .stay__bg: equal
+   specificity, later rule wins, and it silently becomes a grid item. */
+.hero__into > :not(.hero__photo) { position: relative; z-index: 1; }
+.hero__into .chapter__head { border-color: rgba(244, 239, 234, .22); margin-bottom: 0; }
+/* these two sit at the top of the frame, which on a dawn photograph is the
+   brightest part of it, so they carry more weight than the page's other labels */
+.hero__into .label {
+  color: rgba(244, 239, 234, .76);
+  text-shadow: 0 1px 8px rgba(14, 9, 13, .95), 0 0 28px rgba(14, 9, 13, .7);
+}
+/* The chapter reads centred: it is the one screen on the page with nothing
+   beside it, and the dive lands on it head-on. The measure is in ch, so it
+   scales with the font and the line count holds at every width: three lines. */
+/* The screen holds two beats: the headline the dive lands on, then the house
+   copy that arrives under it on the next stretch of scroll. Both centre on one
+   column, because this is the only screen with nothing beside it. */
+.hero__col {
+  align-self: center; justify-self: center;
+  display: grid; justify-items: center; gap: clamp(1.8rem, 4.5vh, 3.4rem);
+  width: 100%; max-width: 62rem;
+}
+/* the measure is in ch, so it scales with the font and the line count holds at
+   every width: three lines */
+.hero__into .display {
+  text-align: center;
+  font-size: clamp(2rem, 1.1rem + 3.4vw, 4.3rem);
+  max-width: 26ch;
+  text-shadow: 0 2px 18px rgba(14, 9, 13, .8), 0 0 46px rgba(14, 9, 13, .55);
+}
+
+/* ── the second beat ──────────────────────────────────────────────────────
+   The same content that used to be its own paper chapter, re-set for type over
+   a photograph: light on dark, and everything carries its own shadow. */
+.into__more { display: grid; justify-items: center; width: 100%; gap: clamp(1.3rem, 3.2vh, 2.2rem); }
+.into__more .arrival__body {
+  margin-top: 0; width: 100%;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 19rem), 1fr));
+  gap: clamp(1.5rem, 4vw, 3.5rem);
+}
+/* This block lands on the steaming water, which is the brightest part of the
+   photograph, so it carries a heavier halo than the page's other body copy.
+   The alternative would be a scrim, and the photograph is meant to run at full
+   strength. */
+.into__more .body-copy {
+  color: rgba(247, 243, 240, .88); max-width: 34ch;
+  text-shadow: 0 1px 8px rgba(12, 8, 12, .96), 0 0 26px rgba(12, 8, 12, .8);
+}
+.into__more .rule-draw { margin: 0; }
+.into__more .rule-draw i { background: var(--blossom); }
+/* Four equal columns, not a centred flex row. Content-sized items put the
+   centres at uneven intervals: measured 157, 136 and 187 apart, because
+   `Seating for dinner` runs 179px wide against 67 for `Baths`, and the group
+   read as three tight items and one adrift. Equal columns fix the centres, and
+   the row takes its measure from the rule directly above it. */
+.into__more .facts {
+  margin-top: 0;
+  display: grid; grid-template-columns: repeat(4, minmax(0, 1fr));
+  width: 100%; gap: clamp(1rem, 2.5vw, 2rem);
+}
+.into__more .facts li { justify-items: center; text-align: center; }
+/* The film is lit differently from the still it replaced, and unevenly across
+   this row: measured over the band, `1904` sits on a luminance of 50 while
+   `Eleven` and `Three` sit on 101, peaking at 111. The halo was tuned for the
+   old photograph and gave out on the bright half, so it carries a third,
+   wider pass and the labels come up off .68. */
+.into__more .facts b {
+  color: var(--cream);
+  text-shadow: 0 1px 8px rgba(12, 8, 12, .98), 0 0 26px rgba(12, 8, 12, .9), 0 0 54px rgba(12, 8, 12, .7);
+}
+.into__more .facts span {
+  color: rgba(244, 239, 234, .8);
+  text-shadow: 0 1px 7px rgba(12, 8, 12, 1), 0 0 22px rgba(12, 8, 12, .92), 0 0 48px rgba(12, 8, 12, .72);
+}
+
+@media (max-width: 900px) {
+  .into__more .arrival__body { grid-template-columns: 1fr; }
+  .into__more .facts { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.4rem 1.5rem; }
+}
+
+.page { position: relative; z-index: 1; }
+
+/* ── scrollbar ────────────────────────────────────────────────────────────
+   The native scrollbar, kept but dressed: a plum-grey track that reads on both
+   the paper and the plum chapters, and a blossom thumb thick enough to be a
+   deliberate part of the page rather than a hairline. Lenis drives the real
+   scroll position, so this stays live and draggable. */
+/* The two APIs cannot share an element: the moment Chrome sees a standard
+   `scrollbar-width` or `scrollbar-color` it drops every ::-webkit-scrollbar
+   rule, which silently left this at the OS overlay bar, 0px wide. So the
+   pseudo-elements run alone here and Firefox is served separately below. */
+html::-webkit-scrollbar { width: 14px; }
+html::-webkit-scrollbar-track { background: rgba(122, 98, 112, .18); }
+html::-webkit-scrollbar-thumb {
+  /* the transparent border is the inset: a 14px lane with an 8px thumb in it */
+  background: var(--blossom-deep);
+  background-clip: padding-box;
+  border: 3px solid transparent;
+  border-radius: 999px;
+}
+html::-webkit-scrollbar-thumb:hover {
+  background: var(--blossom);
+  background-clip: padding-box;
+}
+/* Firefox, which has no ::-webkit-scrollbar to style */
+@supports not selector(::-webkit-scrollbar) {
+  html { scrollbar-width: auto; scrollbar-color: var(--blossom-deep) rgba(122, 98, 112, .18); }
+}
+
+/* ── topbar ───────────────────────────────────────────────────────────────
+   The wordmark and the dock in here are the AUTHORED ones, lifted verbatim
+   into assets/dock.css and assets/dock.js by build/build.mjs, markup included.
+   This block does nothing but hold them at the top of the page and flip the
+   wordmark over the paper chapters. An earlier pass hand-wrote a lookalike
+   nav; it was not the same bar, and this is why it is generated now. */
+.topbar {
+  position: fixed; top: 0; left: 0; right: 0; height: 0; z-index: 60;
+  opacity: 0;                       /* main.js fades it in with the entrance */
+}
+.topbar .wordmark { pointer-events: auto; }
+
+/* The Sakura retone paints every pill dark while the pointer is near it, with
+   !important, and that beats the authored active pill while the active pill
+   keeps the card's near-black ink: dark on dark. It never mattered in the hero,
+   where nothing was really current and the bar scrolled away. It matters in a
+   nav where one item is always current. */
+.topbar .dock-item.is-active[data-near="true"] {
+  background: var(--card) !important;
+  border-color: var(--card) !important;
+  color: var(--card-ink) !important;
+}
+
+/* the capsule is dark glass and holds on cream, so only the wordmark changes */
+.topbar.is-light .wordmark { color: #2A1F26; }
+.topbar.is-light .wordmark .sb { color: rgba(42, 31, 38, .5); }
+
+/* the hero's first line has to clear the bar */
+.hero__into { padding-top: clamp(7.5rem, 16vh, 12rem); }
+
+/* ── chapters ───────────────────────────────────────────────────────────── */
+.chapter {
+  position: relative;
+  padding: clamp(6rem, 14vh, 11rem) var(--gutter);
+}
+.chapter--paper { background: var(--paper); color: var(--ink); }
+.chapter--plum { background: var(--plum); }
+.chapter--deep { background: var(--plum-deep); }
+.chapter--ink { background: var(--plum-ink); }
+
+/* No softening between chapters. The flip between grounds IS the chapter
+   device, so they cut hard; a gradient at each dark section's top edge only
+   made the cut look uncertain. */
+
+.chapter__head {
+  display: flex; justify-content: space-between; gap: 2rem;
+  padding-bottom: clamp(3rem, 8vh, 6rem);
+  border-bottom: 1px solid var(--rule-light);
+  margin-bottom: clamp(3rem, 8vh, 6rem);
+}
+.chapter--deep .chapter__head,
+.chapter--ink .chapter__head,
+.chapter--plum .chapter__head { border-color: var(--rule-dark); }
+
+.label {
+  font-family: var(--font-ui); font-size: var(--step--2); font-weight: 400;
+  letter-spacing: .34em; text-transform: uppercase;
+  color: var(--ink-faint);
+}
+.chapter--deep .label,
+.chapter--ink .label,
+.chapter--plum .label,
+.stay .label { color: var(--cream-faint); }
+.label--accent { color: var(--blossom-deep); }
+
+/* ── display type ───────────────────────────────────────────────────────── */
+.display {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: var(--step-5);
+  line-height: 1.14;
+  letter-spacing: -.014em;
+  max-width: 18ch;
+}
+.display--wide { max-width: 24ch; }
+.display em { color: var(--blossom-deep); }
+.chapter--deep .display em,
+.chapter--ink .display em,
+.chapter--plum .display em,
+.stay .display em { color: var(--blossom); }
+
+.body-copy {
+  font-size: var(--step-0);
+  max-width: var(--measure);
+  color: var(--ink-soft);
+}
+.chapter--deep .body-copy,
+.chapter--ink .body-copy,
+.chapter--plum .body-copy { color: var(--cream-soft); }
+
+/* ── 01 arrival ─────────────────────────────────────────────────────────── */
+.arrival__body {
+  display: grid; gap: clamp(2rem, 5vw, 4rem);
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr));
+  margin-top: clamp(3rem, 8vh, 5.5rem);
+  align-items: start;
+}
+/* a thin accent rule that draws itself across the page on scroll */
+.rule-draw { display: block; width: 100%; height: 1px; margin: clamp(3rem, 8vh, 5rem) 0 0; }
+.rule-draw i {
+  display: block; height: 100%; width: 100%;
+  background: var(--blossom-deep);
+  transform: scaleX(0); transform-origin: left center;
+}
+.facts {
+  display: flex; flex-wrap: wrap; gap: clamp(1.5rem, 5vw, 4.5rem);
+  margin-top: clamp(2.5rem, 6vh, 4rem);
+}
+.facts li { display: grid; gap: .35rem; }
+.facts b {
+  font-family: var(--font-display); font-weight: 500; font-size: var(--step-1);
+  letter-spacing: -.01em;
+}
+.facts span { font-size: var(--step--2); letter-spacing: .28em; text-transform: uppercase; color: var(--ink-faint); }
+
+/* ── 02 the water ────────────────────────────────────────────────────────
+   The drawing is the section, not a layer over a photograph. At full width on
+   paper the linework is finally legible, which is the whole point: it was the
+   best idea in the section and the least visible thing in it. */
+.water__open {
+  display: grid; gap: clamp(2rem, 5vw, 4.5rem);
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  align-items: start;
+}
+.water__lede { display: grid; gap: clamp(1.6rem, 4vh, 2.4rem); }
+/* it fills the column rather than holding the page's 34ch measure, so it lines
+   up with the spec row beneath it and stops leaving a hole under the headline */
+.water__lede .body-copy { max-width: none; }
+.water__spec {
+  display: grid; gap: 1rem clamp(1.5rem, 3vw, 2.5rem);
+  grid-template-columns: repeat(auto-fit, minmax(8.5rem, 1fr));
+  padding-top: clamp(1.2rem, 3vh, 1.8rem);
+  border-top: 1px solid var(--rule-light);
+}
+.water__spec li { display: grid; gap: .3rem; }
+.water__spec b {
+  font-family: var(--font-display); font-weight: 500; font-size: var(--step-0);
+  letter-spacing: -.005em;
+}
+.water__spec span {
+  font-size: var(--step--2); letter-spacing: .26em; text-transform: uppercase;
+  color: var(--ink-faint);
+}
+
+.plan { position: relative; margin: clamp(4rem, 11vh, 8rem) 0 0; }
+/* a plate: a hairline frame around whatever sits in it, drawing or photograph */
+.plan__sheet {
+  position: relative; width: 100%; aspect-ratio: 3 / 2;
+  border: 1px solid var(--rule-light);
+  overflow: hidden;
+}
+.plan__sheet img { width: 100%; height: 100%; object-fit: cover; will-change: transform; }
+.plan__svg { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+.plan__svg [data-draw] {
+  fill: none;
+  stroke: rgba(36, 27, 33, .62);
+  stroke-width: 1.05;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+}
+.plan__svg [data-draw].is-accent { stroke: var(--blossom-deep); }
+.plan__svg text {
+  fill: var(--ink-faint);
+  font-family: var(--font-ui); font-size: 11px; font-weight: 400;
+  letter-spacing: .24em; text-transform: uppercase;
+}
+.plan__caption {
+  position: absolute; right: 0; bottom: -2.4rem;
+  font-size: var(--step--2); letter-spacing: .28em; text-transform: uppercase;
+  color: var(--ink-faint);
+}
+
+/* the three baths: the temperature is the headline of each */
+.waters {
+  display: grid; gap: clamp(2rem, 4vw, 3.5rem);
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr));
+  margin-top: clamp(5rem, 12vh, 8rem);
+}
+.waters > div { border-top: 1px solid var(--rule-light); padding-top: clamp(1.2rem, 3vh, 1.8rem); }
+.waters dt {
+  font-size: var(--step--2); letter-spacing: .3em; text-transform: uppercase;
+  color: var(--ink-faint);
+}
+.waters dd.temp {
+  display: block; margin: .5rem 0 .9rem;
+  font-family: var(--font-display); font-size: var(--step-5); line-height: 1;
+  color: var(--blossom-deep); font-variant-numeric: tabular-nums; letter-spacing: -.03em;
+}
+.waters dd { margin: 0; color: var(--ink-soft); font-size: var(--step--1); max-width: 26ch; }
+
+/* the closing beat: the site photograph, and the line the section is about */
+.water__close {
+  display: grid; gap: clamp(2rem, 5vw, 4rem); align-items: end;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+  margin-top: clamp(4rem, 10vh, 7rem);
+}
+.water__photo {
+  position: relative; margin: 0;
+  overflow: hidden; aspect-ratio: 3 / 2;
+  background: var(--paper-2);
+}
+/* The incoming photograph settles out of a slight push in as it fades, which
+   is what keeps the swap from reading as a hard cut. It is a CSS transform, so
+   these images are deliberately NOT in the scroll parallax: a drifting image
+   inside a swapping frame is busy, and gsap would own the transform. */
+.water__photo img {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%; object-fit: cover;
+  opacity: 0; transform: scale(1.035);
+  transition: opacity .65s var(--ease), transform 1.1s var(--ease);
+}
+.water__photo img.is-on { opacity: 1; transform: none; }
+
+.water__cap {
+  position: absolute; left: 0; right: 0; bottom: 0; z-index: 2;
+  display: grid; padding: .7rem .9rem;
+  background: linear-gradient(180deg, rgba(20, 13, 18, 0), rgba(20, 13, 18, .72));
+  font-size: var(--step--2); letter-spacing: .26em; text-transform: uppercase;
+  color: rgba(244, 239, 234, .82);
+}
+.water__cap span {
+  grid-area: 1 / 1;
+  opacity: 0; transform: translateY(4px);
+  transition: opacity .45s var(--ease), transform .6s var(--ease);
+}
+.water__cap span.is-on { opacity: 1; transform: none; }
+
+/* The dim on the baths you are not hovering is driven from main.js, not from
+   here: [data-reveal] finishes by writing an inline opacity on each row, and a
+   stylesheet rule cannot beat that. */
+/* all three quotes share one grid cell, so the block is sized by the longest
+   and nothing below it shifts as they change */
+.water__quotes { display: grid; }
+.water__quotes .pull { grid-area: 1 / 1; }
+.pull {
+  opacity: 0; transform: translateY(8px);
+  transition: opacity .5s var(--ease), transform .7s var(--ease);
+  margin: 0; max-width: 34ch;
+  font-family: var(--font-display);
+  font-size: var(--step-1); line-height: 1.42;
+  color: var(--ink);
+}
+.pull.is-on { opacity: 1; transform: none; }
+.pull cite {
+  display: block; margin-top: 1.4rem; font-family: var(--font-ui); font-style: normal;
+  font-size: var(--step--2); letter-spacing: .28em; text-transform: uppercase; color: var(--ink-faint);
+}
+
+@media (max-width: 900px) {
+  .water__open, .water__close { grid-template-columns: 1fr; }
+  .plan__sheet { aspect-ratio: 4 / 3; }
+}
+
+/* ── 03 the year ─────────────────────────────────────────────────────────
+   Four columns, one per season, on the plum so the page does not run two paper
+   chapters back to back. The kanji is the anchor: it needs no photograph to
+   work, which matters because the photographs here are placeholders. */
+/* The opening spread: display headline left, lede right. Shared by 03 and 04
+   so the two chapters open on identical geometry. */
+.chapter__open {
+  display: grid; gap: clamp(2rem, 5vw, 4.5rem);
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  /* centred against the headline rather than hung off its top line: the
+     headline is three times the height, so aligning to start left the copy
+     stranded at the top of a tall row */
+  align-items: center;
+}
+/* pulled in off the full column and held to the right rail, so its right edge
+   lines up with the label above it */
+.chapter__open .body-copy { max-width: 58ch; justify-self: end; }
+
+/* Subgrid so the four columns share their rows: mark, photograph, name, dates,
+   note all sit on the same lines across the band. Without it each column sizes
+   its own rows and the names end up a few pixels apart, which on a four-up
+   comparison reads as sloppy. Falls back to the same layout, just unaligned. */
+.seasons__list {
+  display: grid; gap: clamp(2rem, 4vw, 3.2rem);
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 13rem), 1fr));
+  grid-template-rows: auto auto auto auto auto;
+  margin-top: clamp(4rem, 11vh, 7rem);
+}
+.seasons__list li {
+  grid-row: span 5;
+  display: grid; grid-template-rows: subgrid; gap: 0;
+  border-top: 1px solid var(--rule-dark);
+  padding-top: clamp(1.2rem, 3vh, 1.8rem);
+}
+.seasons__mark {
+  font-family: var(--font-display); font-weight: 400;
+  font-size: var(--step-5); line-height: 1;
+  color: var(--blossom);
+}
+.seasons__media { overflow: hidden; margin: clamp(1.2rem, 3vh, 1.8rem) 0; }
+.seasons__media img { width: 100%; height: 100%; object-fit: cover; aspect-ratio: 5 / 4; will-change: transform; }
+.seasons__name {
+  font-family: var(--font-display); font-weight: 400; font-size: var(--step-1);
+  letter-spacing: -.01em;
+}
+.seasons__when {
+  margin-top: .35rem;
+  font-size: var(--step--2); letter-spacing: .26em; text-transform: uppercase;
+  color: var(--cream-faint);
+}
+.seasons__note {
+  margin-top: .9rem;
+  font-size: var(--step--1); color: var(--cream-soft); max-width: 30ch;
+}
+.seasons__foot {
+  margin-top: clamp(3rem, 8vh, 5rem);
+  padding-top: clamp(1.4rem, 3vh, 2rem);
+  border-top: 1px solid var(--rule-dark);
+  font-family: var(--font-display); font-size: var(--step-1);
+  color: var(--cream-soft);
+}
+
+@media (max-width: 900px) {
+  .chapter__open { grid-template-columns: 1fr; }
+}
+
+/* ── 03 the rooms: a numbered index, offset ─────────────────────────────── */
+.rooms { display: grid; gap: clamp(6rem, 16vh, 12rem); margin-top: clamp(4rem, 10vh, 7rem); }
+.room {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: clamp(1rem, 3vw, 2.5rem);
+  align-items: center;
+}
+
+/* The photograph runs off the edge of the page, so it needs the gutter back.
+   Its box never moves: the reveal is a clip-path opening across a still
+   image, which is why the parallax that used to drift these was taken off. */
+.room__media {
+  grid-row: 1;
+  overflow: hidden;
+  aspect-ratio: 5 / 4;
+  background: var(--paper-warm, rgba(0, 0, 0, .04));
+}
+.room__media img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+.room__side { grid-row: 1; display: grid; align-content: center; gap: clamp(1.4rem, 3.5vh, 2.4rem); }
+.room__no {
+  font-family: var(--font-display); font-weight: 400;
+  font-size: var(--step-7); line-height: .8;
+  color: var(--blossom-deep);
+}
+.room__text { display: grid; gap: .7rem; }
+.room__name { font-family: var(--font-display); font-size: var(--step-3); font-weight: 400; letter-spacing: -.01em; }
+.room__meta { font-size: var(--step--2); letter-spacing: .26em; text-transform: uppercase; color: var(--ink-faint); }
+.room__note { color: var(--ink-soft); font-size: var(--step--1); max-width: 32ch; }
+
+/* Odd rooms bleed right and open right to left, the even one mirrors. The
+   alignment mirrors with it, so the numeral always sits on the outside edge
+   and the reveal always travels away from the photograph's own edge. */
+.room--a .room__media,
+.room--c .room__media {
+  grid-column: 6 / 13;
+  margin-right: calc(var(--gutter) * -1);
+  clip-path: inset(0 0 0 100%);
+}
+.room--a .room__side,
+.room--c .room__side { grid-column: 1 / 6; }
+
+.room--b .room__media {
+  grid-column: 1 / 8;
+  margin-left: calc(var(--gutter) * -1);
+  clip-path: inset(0 100% 0 0);
+}
+.room--b .room__side { grid-column: 8 / 13; text-align: right; }
+.room--b .room__note { margin-left: auto; }
+
+.rooms__foot {
+  margin-top: clamp(4rem, 10vh, 7rem);
+  padding-top: clamp(2rem, 5vh, 3rem);
+  border-top: 1px solid var(--rule-light);
+  display: flex; flex-wrap: wrap; gap: 1.5rem; justify-content: space-between; align-items: baseline;
+}
+
+/* ── 04 the day: pinned, scrubbed ───────────────────────────────────────── */
+.day { position: relative; background: var(--plum-ink); }
+.day__stage {
+  position: relative; height: 100svh; overflow: hidden;
+  display: grid; grid-template-rows: auto 1fr auto;
+  /* the section pins, so its head sits under the fixed topbar for the whole
+     time it is on screen and has to clear it rather than pass behind it */
+  padding: clamp(7rem, 15vh, 9.5rem) var(--gutter) clamp(1.6rem, 4vh, 3rem);
+}
+
+/* one photograph per hour, stacked so each dissolves over the one before it */
+.day__shots { position: absolute; inset: 0; z-index: 1; }
+/* the 06:00 beat is a <video>, and it stacks and dissolves exactly like the
+   four stills, so both share this */
+.day__shots img,
+.day__shots video {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%; object-fit: cover;
+  opacity: 0; will-change: opacity;
+  display: block;
+}
+/* the sky is one element whose gradient is rewritten on every scrub tick */
+.day__sky {
+  position: absolute; inset: 0; z-index: 0;
+  background: linear-gradient(180deg, #8FA6B8 0%, #E4C9A8 62%, #F0DFC6 100%);
+}
+.day__ridge { display: none; }
+.day__ridge svg { width: 100%; height: 100%; display: block; }
+
+.day__head, .day__foot { position: relative; z-index: 4; display: flex; justify-content: space-between; gap: 2rem; }
+/* the sky behind these runs from near-white to near-black, so they carry their
+   own shadow rather than a fixed colour that only works at one hour */
+.day__head .label, .ticker span { text-shadow: 0 1px 12px rgba(23, 17, 22, .55); }
+.day__head .label { color: rgba(244, 239, 234, .6); }
+.day__body { position: relative; z-index: 4; display: grid; align-content: center; }
+
+/* the hour numerals drift horizontally at their own rate over the sky */
+.day__hours { position: relative; height: clamp(6rem, 16vh, 11rem); }
+.hour {
+  position: absolute; left: 0; top: 0;
+  font-family: var(--font-display); font-weight: 400;
+  font-size: var(--step-7); line-height: 1;
+  letter-spacing: -.03em; white-space: nowrap;
+  color: var(--cream);
+  opacity: 0;
+  text-shadow: 0 2px 18px rgba(12, 8, 12, .85), 0 0 46px rgba(12, 8, 12, .6);
+}
+.day__caption {
+  position: relative; margin-top: clamp(1.5rem, 4vh, 2.5rem);
+  height: clamp(5rem, 11vh, 7rem);
+}
+.day__caption p {
+  position: absolute; inset: 0;
+  max-width: 30ch; opacity: 0;
+  font-family: var(--font-display); font-size: var(--step-1); line-height: 1.45;
+  color: var(--cream);
+  text-shadow: 0 1px 10px rgba(12, 8, 12, .95), 0 0 30px rgba(12, 8, 12, .7);
+}
+.ticker { display: flex; flex-wrap: wrap; gap: 1.4rem; }
+.ticker span {
+  font-size: var(--step--2); letter-spacing: .3em; text-transform: uppercase;
+  color: var(--cream-faint); transition: color .5s var(--ease);
+}
+.ticker span.is-on { color: var(--blossom); }
+.day__bar { position: relative; z-index: 4; height: 1px; background: var(--rule-dark); margin-top: 1.2rem; }
+.day__bar i { display: block; height: 100%; background: var(--blossom); transform: scaleX(0); transform-origin: left center; }
+
+/* ── the footer ─────────────────────────────────────────────────────────── */
+/* THE SHEET LIFT
+   The track is pulled up a full screen so the finale is already stuck at the
+   top of the viewport while the day section is still covering it. The day
+   carries the higher z-index, so it slides off the finale rather than the two
+   travelling together. Nothing animates: it is two elements and a stacking
+   order. */
+.stay-wrap { position: relative; z-index: 0; height: 200svh; margin-top: -100svh; }
+.day { z-index: 2; }
+
+.stay {
+  position: sticky; top: 0;
+  height: 100svh; overflow: hidden;
+  display: grid; align-content: center; justify-items: center; text-align: center;
+  /* symmetric, so `center` actually centres rather than being pushed by the
+     padding it is centring inside */
+  padding: clamp(7rem, 14vh, 10rem) var(--gutter);
+  color: var(--cream);
+  background: var(--plum);
+}
+/* the scene, stripped to the world. It is a second WebGL context, so it is
+   held until the section is close and paused again the moment it leaves. */
+.stay__scene { position: absolute; inset: 0; z-index: 0; width: 100%; height: 100%; border: 0; background: transparent; }
+/* The stops track where the type actually sits now that the block is centred,
+   rather than ramping to the bottom. The top quarter stays fully open so the
+   petals fall through clear plum, the headline gets a light veil (it is solid
+   cream and does not need much), and the weight arrives under the address and
+   the metadata. The address is an outline with almost no contrast of its own,
+   and it is what sets the floor here. */
+.stay::after {
+  content: ''; position: absolute; inset: 0; z-index: 0; pointer-events: none;
+  background: linear-gradient(180deg,
+    rgba(23, 17, 22, 0) 0%,
+    rgba(23, 17, 22, .14) 22%,
+    rgba(23, 17, 22, .42) 36%,
+    rgba(23, 17, 22, .66) 52%,
+    rgba(23, 17, 22, .7) 74%,
+    rgba(23, 17, 22, .74) 100%);
+}
+/* the background must keep its own position:absolute, so it is excluded
+   here rather than relying on source order */
+.stay > :not(.stay__scene) { position: relative; z-index: 1; }
+.stay .display {
+  /* The break is set in the markup: cream line over the blossom one. The
+     ceiling only has to clear the longer of the two lines, which measures 939
+     against a 1006 box here, and the block shrink-wraps to its content below
+     that. Raising it cannot cause a wrap, the <br> already owns the break. */
+  max-width: 26ch;
+  text-shadow: 0 2px 18px rgba(12, 8, 12, .85), 0 0 48px rgba(12, 8, 12, .6);
+}
+.stay__mail {
+  display: inline-block;
+  filter: drop-shadow(0 2px 10px rgba(12, 8, 12, .92)) drop-shadow(0 0 34px rgba(12, 8, 12, .6));
+  margin-top: clamp(2.5rem, 7vh, 4.5rem);
+  font-family: var(--font-display); font-size: var(--step-5); line-height: 1;
+  letter-spacing: -.02em; text-decoration: none;
+  /* A pure outline has no contrast of its own, and here it crosses a blossom
+     cluster, where it all but vanished. The faint fill gives the letters a body
+     to read as, dark enough to stay a ghost against the plum. */
+  color: rgba(244, 239, 234, .13);
+  -webkit-text-stroke: 1px var(--cream-soft);
+  transition: color .7s var(--ease), -webkit-text-stroke-color .7s var(--ease);
+  will-change: transform;
+}
+.stay__mail:hover { color: var(--blossom); -webkit-text-stroke-color: transparent; }
+/* the row centres its own contents but keeps the full-width rule above it, so
+   the composition still has a base line rather than a floating cluster */
+/* Taken out of the flow and pinned to the foot, so the headline and the
+   address centre against the whole section rather than against whatever is
+   left above the metadata. The child selector is deliberate: `.stay > *` has
+   the higher specificity and would put this straight back into the grid. Same
+   trap as .stay__scene and .hero__photo, which is now three times. */
+.stay > .stay__meta {
+  position: absolute; z-index: 1;
+  left: var(--gutter); right: var(--gutter);
+  bottom: clamp(2rem, 5vh, 3.5rem);
+  display: flex; flex-wrap: wrap; justify-content: center;
+  gap: 1rem clamp(1.5rem, 5vw, 4rem);
+  margin-top: 0;
+  padding-top: 1.6rem;
+  border-top: 1px solid var(--rule-dark);
+}
+.stay__meta li {
+  font-size: var(--step--2); letter-spacing: .26em; text-transform: uppercase;
+  color: rgba(244, 239, 234, .66);
+  text-shadow: 0 1px 8px rgba(12, 8, 12, .95), 0 0 22px rgba(12, 8, 12, .8);
+}
+
+/* ── reveal initial states (JS animates to the resting state) ───────────── */
+[data-reveal] { opacity: 0; transform: translateY(28px); }
+.split-line { overflow: hidden; }
+
+/* GSAP's line masks clip at the line box, and the line box is not tall enough
+   for this face. At the arrival headline's size it leaves 9px below the
+   baseline while Shippori's y reaches 13.95px, so every descender on every
+   masked headline was being cut: the g in "nothing", the y in "you", the p in
+   "up", the q in "quiet". The line takes the extra room, which grows the clip
+   with it, and the mask takes an equal negative margin so no spacing changes.
+   Selected via :has() rather than by GSAP's generated class name, which is an
+   internal that can move between versions. */
+.display .split-line-inner { padding-bottom: .18em; }
+.display :has(> .split-line-inner) { margin-bottom: -.18em; }
+
+/* ── responsive ─────────────────────────────────────────────────────────── */
+@media (max-width: 900px) {
+  /* one column, and the photograph bleeds off both edges rather than one.
+     The masks keep their directions, so the alternation still reads. */
+  .room { grid-template-columns: 1fr; gap: 1.75rem; }
+  .room__no { font-size: var(--step-5); }
+  .room--a .room__media, .room--b .room__media, .room--c .room__media,
+  .room--a .room__side, .room--b .room__side, .room--c .room__side {
+    grid-column: 1; grid-row: auto;
+  }
+  .room--a .room__media, .room--b .room__media, .room--c .room__media {
+    margin-inline: calc(var(--gutter) * -1);
+    aspect-ratio: 4 / 3;
+  }
+  .room--b .room__side { text-align: left; }
+  .room--b .room__note { margin-left: 0; }
+  .room__side { gap: 1rem; }
+  .pull { margin-top: -3rem; }
+  .chapter__head { flex-direction: column; gap: .6rem; }
+  /* the address is one line or it is not a ghost link */
+  .stay__mail { font-size: var(--step-3); }
+}
+
+/* touch: the hero frame stops swallowing the gesture, so the page scrolls.
+   The scene keeps rendering, it just stops tracking the pointer. */
+@media (pointer: coarse) {
+  .hero__frame { pointer-events: none; }
+  .cursor { display: none; }
+}
+
+/* ── reduced motion ─────────────────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+  .grain { display: none; }
+  [data-reveal] { opacity: 1; transform: none; }
+  .rule-draw i, .day__bar i { transform: scaleX(1); }
+  /* CSS wins over the JS fallback here, so the masks are open with no script */
+  .room__media { clip-path: none !important; }
+  .hero { position: relative; }
+  .day__stage { height: auto; }
+  .day__hours { height: auto; }
+  .hour { position: static; opacity: 1; font-size: var(--step-5); }
+  .day__caption { height: auto; }
+  .day__caption p { position: static; opacity: 1; margin-top: .5rem; }
+}
