@@ -24,22 +24,22 @@
    would buy us. */
 @font-face {
   font-family: 'Shippori Mincho';
-  src: url('assets/fonts/shippori-mincho-400-latin.woff2') format('woff2');
+  src: url('https://cdn.jsdelivr.net/gh/Sam1983Aing/aura-assets@1.8.0/kaya/shippori-mincho-400-latin.woff2') format('woff2');
   font-weight: 400; font-style: normal; font-display: swap;
 }
 @font-face {
   font-family: 'Shippori Mincho';
-  src: url('assets/fonts/shippori-mincho-500-latin.woff2') format('woff2');
+  src: url('https://cdn.jsdelivr.net/gh/Sam1983Aing/aura-assets@1.8.0/kaya/shippori-mincho-500-latin.woff2') format('woff2');
   font-weight: 500; font-style: normal; font-display: swap;
 }
 @font-face {
   font-family: 'Shippori Mincho';
-  src: url('assets/fonts/shippori-mincho-600-latin.woff2') format('woff2');
+  src: url('https://cdn.jsdelivr.net/gh/Sam1983Aing/aura-assets@1.8.0/kaya/shippori-mincho-600-latin.woff2') format('woff2');
   font-weight: 600; font-style: normal; font-display: swap;
 }
 @font-face {
   font-family: 'Lexend';
-  src: url('inner-green-assets/lexend-latin.woff2') format('woff2');
+  src: url('https://cdn.jsdelivr.net/gh/Sam1983Aing/aura-assets@1.8.0/kaya/lexend-latin.woff2') format('woff2');
   font-weight: 100 900; font-style: normal; font-display: swap;
 }
 
