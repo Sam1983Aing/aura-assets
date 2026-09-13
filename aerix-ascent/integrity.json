@@ -1,0 +1,176 @@
+{
+  "version": "4.17.1",
+  "modelSHA256": "90ed965cea1f6e9469772c0b2ecd19f21cbd1c072ad551d1b424ac31bbb3de35",
+  "files": [
+    {
+      "file": "README.md",
+      "bytes": 610,
+      "sha256": "59fd8c37a00bb7ceb21d2e4e98d6a3beceaba2bb214831131869354bf48b0359"
+    },
+    {
+      "file": "THIRD-PARTY.md",
+      "bytes": 1951,
+      "sha256": "85bfa0bed0259b74e941f8da5c78b06e41e622bb1f0026b409a48c197aa9c717"
+    },
+    {
+      "file": "assets/favicon.svg",
+      "bytes": 246,
+      "sha256": "242fa52a0e677a611f1cb4dfcf1c099927cb33f7c43cefc6959bb927386ce991"
+    },
+    {
+      "file": "assets/flight-city-v4.14.webp",
+      "bytes": 1742314,
+      "sha256": "a8c3bd5d800d660d16fad4cdfde14e5844ad71f8052c103ca92b06ab59dcfab5"
+    },
+    {
+      "file": "assets/flight-forest-v4.10.webp",
+      "bytes": 1634610,
+      "sha256": "cc95458bac7b6ca23efab6e70cdbf0255802304e49db02e3a51fb14d33e5f6d4"
+    },
+    {
+      "file": "assets/flight-metropolis-v4.17.webp",
+      "bytes": 630460,
+      "sha256": "7b89d7b1b2cd8da895ff08da85e3d11c7e53474913ba4154cf88c8fa045d7e84"
+    },
+    {
+      "file": "assets/flight-resort-v4.14.webp",
+      "bytes": 1970796,
+      "sha256": "94259175544d73cddc7e300d40e46fa58ac62349ca024b8e6c6f45b631cf5e63"
+    },
+    {
+      "file": "assets/fonts/fonts.css",
+      "bytes": 2377,
+      "sha256": "7ec7fdfaf4e7f8a0dc6daa03610893d860f269b379f808a2d9e009e4c1d07653"
+    },
+    {
+      "file": "assets/fonts/ibm-plex-mono-400.woff2",
+      "bytes": 10052,
+      "sha256": "c36f509c0a8f9f85f29cb44bc8701d8a9e0b14c499e77a884f789ead7093a7ac"
+    },
+    {
+      "file": "assets/fonts/ibm-plex-mono-500.woff2",
+      "bytes": 10060,
+      "sha256": "a76f53ca6612e7b3828eec2311098675b7f9849ae4169a8bcef6302aec02a6c0"
+    },
+    {
+      "file": "assets/fonts/ibm-plex-mono-OFL.txt",
+      "bytes": 4456,
+      "sha256": "7e6b2818edbd8f6a01ae80641cc8f16a51080d08fb4e532be3a0b6f74adb07da"
+    },
+    {
+      "file": "assets/fonts/instrument-sans-400.woff2",
+      "bytes": 29904,
+      "sha256": "6219bc4bfdfc5d9b2201dcdf046218b122a758f932e25ed5f168f929b7ca2311"
+    },
+    {
+      "file": "assets/fonts/instrument-sans-OFL.txt",
+      "bytes": 4403,
+      "sha256": "9e27a72ed30eb49a08678f6a5d6ed98ec7ba5368f541637ee0683ec9134ef966"
+    },
+    {
+      "file": "assets/fonts/michroma-OFL.txt",
+      "bytes": 4395,
+      "sha256": "33c39ce59a45bfb0dae3280e98bdb46be59d6d68efc62d4dc5fae90a26d2f393"
+    },
+    {
+      "file": "assets/fonts/michroma.ttf",
+      "bytes": 61440,
+      "sha256": "40d06b46547183d90838788094f0d4125f385ba2580f4f41b8bd39a6b9ea3d6f"
+    },
+    {
+      "file": "assets/glacial-horizon-v4.webp",
+      "bytes": 1535094,
+      "sha256": "2654261122737a155189c977953889d4d1647cdd026afbc9307494eae0588d7f"
+    },
+    {
+      "file": "assets/model/90ed965cea1f6e94-01.bin",
+      "bytes": 23068672,
+      "sha256": "d929410a68f70a8207bca8b847db34baced11b32b4b9733e8145291f9a8b2602"
+    },
+    {
+      "file": "assets/model/90ed965cea1f6e94-02.bin",
+      "bytes": 23068672,
+      "sha256": "3e59ab750cae02085f57df2d5f47d0e81ba493d2e584fc5e78737c20780b10ec"
+    },
+    {
+      "file": "assets/model/90ed965cea1f6e94-03.bin",
+      "bytes": 23068672,
+      "sha256": "a5e0f785bb3b9f67507e2033bc8c5690531ea27e2b44ae8d655aa1b2cb93a8ca"
+    },
+    {
+      "file": "assets/model/90ed965cea1f6e94-04.bin",
+      "bytes": 23068672,
+      "sha256": "c6130a0f45c54d14c5b462bad988cfc5674e48a9689810c09fbf17394df0a5cd"
+    },
+    {
+      "file": "assets/model/90ed965cea1f6e94-05.bin",
+      "bytes": 23068672,
+      "sha256": "82f0d5b805559f3fb4a3c10bdd1028f1bc6df9bfc77de214fce8d7790175a7f8"
+    },
+    {
+      "file": "assets/model/90ed965cea1f6e94-06.bin",
+      "bytes": 22268288,
+      "sha256": "9165a2baa83279f565980afbe52adf576b5d3c119c03bff718ba42568ac20fc6"
+    },
+    {
+      "file": "assets/model/manifest.json",
+      "bytes": 519,
+      "sha256": "4e8abdfb861382355d3833888b89ccd2d810eecdcea3c7460a933610f674299f"
+    },
+    {
+      "file": "assets/v4-exploded.webp",
+      "bytes": 196380,
+      "sha256": "79ad354b8c7aa31d5df4677cf59aac1fbfec0b9da2896b356c028e51cbe96b77"
+    },
+    {
+      "file": "assets/v4-hero.webp",
+      "bytes": 319656,
+      "sha256": "cd4ec93f1f9928eeb83e8f87abc5e5f3793f1b2211fdc55812de561d0c4cfaa1"
+    },
+    {
+      "file": "assets/v4-optics.webp",
+      "bytes": 77798,
+      "sha256": "ed0303c6dcbe0e55208b92d6b62239c8e85c5e48878850cc28186c2078942222"
+    },
+    {
+      "file": "assets/v4-sky.webp",
+      "bytes": 210968,
+      "sha256": "00bb3be88860bce04e01457b483f62599582c013a78c78cf30daf840be8f81b0"
+    },
+    {
+      "file": "assets/v43-battery.webp",
+      "bytes": 342866,
+      "sha256": "0f441cb8d5c7cb666da477b69f1b3e7382d11e722eead25ae614ccb7fa59582a"
+    },
+    {
+      "file": "assets/v44-computer.webp",
+      "bytes": 284886,
+      "sha256": "f0082cc1c7475053017b07adee86ff1d652d552f10b76f85a07351a7e045c3a8"
+    },
+    {
+      "file": "vendor/LENIS-LICENSE",
+      "bytes": 1096,
+      "sha256": "bba15b1137346a73ed8c35e7f20961a69e0ed842d956a50339240c3e7b08c089"
+    },
+    {
+      "file": "vendor/draco/LICENSE",
+      "bytes": 13898,
+      "sha256": "d3709b0fb4b8a94bbb1d02b8a2e484f258b0d9c5c5a01f940391f3fe662cd1a4"
+    },
+    {
+      "file": "vendor/draco/draco_decoder.wasm",
+      "bytes": 192420,
+      "sha256": "a680d927bed9cb864ddbd63521868891af2bfbe755092761b4837487618df8ac"
+    },
+    {
+      "file": "vendor/draco/draco_wasm_wrapper.js",
+      "bytes": 58456,
+      "sha256": "8bb2952d2ba7d67e1414f8df819410cb0434a666be53f671fff75f68843d76f6"
+    },
+    {
+      "file": "vendor/three/LICENSE",
+      "bytes": 1081,
+      "sha256": "bfe119ea4fd413f5f7ca3fcd63adb0c4a073ed39daa2fe7d3e6b769e21272601"
+    }
+  ]
+}
