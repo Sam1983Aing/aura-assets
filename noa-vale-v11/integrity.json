@@ -1,0 +1,134 @@
+{
+  "assets/biography-action/noa-vale-camera.png": {
+    "bytes": 1993329,
+    "sha256": "9344cc56857bdea60b1033332e64143317e122679553ad91e344e709b3c93cb7"
+  },
+  "assets/guide-poses/practice-image.png": {
+    "bytes": 1592553,
+    "sha256": "187a57679baaa2c2b5c6f369c0ca8b14dd08060b55512f72b40fc0f70062886a"
+  },
+  "assets/guide-poses/works-guide.png": {
+    "bytes": 985987,
+    "sha256": "528b9a8e7fe69a8e42d53cbc5e8382429e5245a0153f9cab4f2ec75789204959"
+  },
+  "assets/identity/noa-vale-signature.png": {
+    "bytes": 230099,
+    "sha256": "e8440af7ada0e247df016e919adc439eff69e893fa3e26257ab23ec5b4d2c44a"
+  },
+  "assets/portraits/noa-contact-right.png": {
+    "bytes": 1542986,
+    "sha256": "047275bf9a6985a750d17071a00198377c8e7f520d37f64fe9fe538164e3e627"
+  },
+  "assets/portraits/noa-vale-fullbody-contour.svg": {
+    "bytes": 7412,
+    "sha256": "f463286151806b320a456b3de8f2d0ebb212868e279f1e0a1b272e73c71e87b9"
+  },
+  "assets/portraits/noa-vale-fullbody.png": {
+    "bytes": 1480760,
+    "sha256": "af155393a911efbe22cb932603266bcc64bab0b12a7da4be24c2c5fde56da3ac"
+  },
+  "assets/practice/01-magnetic.png": {
+    "bytes": 2190217,
+    "sha256": "337336a57d343919ae4eb87d3c669c681d212039e628cabbfb4f0a009757feb8"
+  },
+  "assets/practice/02-filament.png": {
+    "bytes": 1787196,
+    "sha256": "60de108dea4d51f4a26bf0e784df9185cccc90f0db36610b5a82a119f8be2c13"
+  },
+  "assets/practice/03-kinetic.png": {
+    "bytes": 1937059,
+    "sha256": "9c39e3060d7b05204d7ea7338abe518ac791cfd2412c06b5213f7d675a2fa02c"
+  },
+  "assets/practice/04-mechanism.png": {
+    "bytes": 1504366,
+    "sha256": "c332bf64671b7ee591e3f271ecb9e620d7db388dec1942eb442988794e23c7d6"
+  },
+  "assets/practice/05-architecture.png": {
+    "bytes": 1845449,
+    "sha256": "86eff1546704d10868e6d30b380eaeee32c11539dfb5811d4b6dac4f78093b22"
+  },
+  "assets/practice/06-typography.png": {
+    "bytes": 1938936,
+    "sha256": "68c0bd21ba1ebf9ffe9da1841f9c07b46c350927ce9c93d05674fca1a5f60a2d"
+  },
+  "assets/practice/07-portrait.png": {
+    "bytes": 1898876,
+    "sha256": "ad37ea92061b6cc7a74c4d376c923989fcd5afbfcda3b74c02aa5116e4d45a78"
+  },
+  "assets/practice/08-botanical.png": {
+    "bytes": 1617238,
+    "sha256": "9c8b0343e6a28a7e9998d9326faa6a1d5d9cbb9b41873577427b9232557c14a2"
+  },
+  "assets/practice/09-landscape.png": {
+    "bytes": 2019532,
+    "sha256": "44f34a4b136eba43fb4de078bfed0c246bd75d003440e824cd56fcc32b424e71"
+  },
+  "assets/practice/10-optics.png": {
+    "bytes": 1802185,
+    "sha256": "4846e8d314d4853891a1d4aad94d40334a018160186a3146c6ea1ec21277d5af"
+  },
+  "assets/selected-motion/01.mp4": {
+    "bytes": 3469606,
+    "sha256": "1e4dedc294f5a1f6328bcd54cc9887a318e35618dbd17eba43643a3e1e8e7249"
+  },
+  "assets/selected-motion/01.png": {
+    "bytes": 2000010,
+    "sha256": "be3abe3a3af533fb43ac515cedde5280a607046b09835fb033ae922123bad6ee"
+  },
+  "assets/selected-motion/02.mp4": {
+    "bytes": 3965084,
+    "sha256": "b9c9ce32240b2eab1af077afaca44623db6719ce66bfce96702fa90be0220b56"
+  },
+  "assets/selected-motion/02.png": {
+    "bytes": 1902137,
+    "sha256": "59b79b3c576c7d5c11964592fd9e85624af81523ed200c499c3fbb33972657eb"
+  },
+  "assets/selected-motion/03.mp4": {
+    "bytes": 2463691,
+    "sha256": "88732d3d0b5c085638d86d3aab5d6b56bef82d90b5a2b7a9feecfd877bc32a3f"
+  },
+  "assets/selected-motion/03.png": {
+    "bytes": 1547142,
+    "sha256": "960946754e8e27b142228cd12b9925d2ed2bfd71b4559518e4bda1e06717f612"
+  },
+  "assets/selected-motion/04.mp4": {
+    "bytes": 2892246,
+    "sha256": "148d92c3e041f906fcfe48f0b48ccfc8bdb2e8379267dbaa4dbc684384ba9afc"
+  },
+  "assets/selected-motion/04.png": {
+    "bytes": 1693784,
+    "sha256": "bc6874df5c0f0a6120aa074a77e383a33241082f229b70581679a082df1fe602"
+  },
+  "assets/selected-motion/05.mp4": {
+    "bytes": 2378343,
+    "sha256": "069dd2a3b44c9fc094315d9cb928872e19629a3587d629caf45945bd76ccb6b5"
+  },
+  "assets/selected-motion/05.png": {
+    "bytes": 1888390,
+    "sha256": "9cc03fe1914df2584d7b3de2d158febc7273c5bee167566ddc9578da25770dd0"
+  },
+  "assets/selected-motion/06.mp4": {
+    "bytes": 2807701,
+    "sha256": "ea145439f837906ceb89034dcf29b7eff82892825ddda2f59ba5ea3b3b317ed5"
+  },
+  "assets/selected-motion/06.png": {
+    "bytes": 1572606,
+    "sha256": "5e0d3e8b8a7168959a4d4b5c6fa6b819edabb844bac4ab8026069b1b0cd1b50c"
+  },
+  "assets/selected-motion/07.mp4": {
+    "bytes": 2881595,
+    "sha256": "23f62d8d987d7613c1414d946466c947e1b8a271eb7b292618705c27399ad73b"
+  },
+  "assets/selected-motion/07.png": {
+    "bytes": 1893279,
+    "sha256": "b15ba112446384431a2df52665a343fd9a5f22063ffa9dac8d06c88448f786a6"
+  },
+  "assets/selected-motion/08.mp4": {
+    "bytes": 2670108,
+    "sha256": "98f44a021a3f12eb01a89f12d4762a990679141fcab5bf9ed5f4b09e87b5f5b5"
+  },
+  "assets/selected-motion/08.png": {
+    "bytes": 2067599,
+    "sha256": "eb5d1f8908b2b3dcf6809824c677c48d17e3e346ef7f743bac93e834c09b103f"
+  }
+}
