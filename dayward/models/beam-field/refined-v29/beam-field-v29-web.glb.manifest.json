@@ -1,0 +1,27 @@
+{
+  "file": "beam-field-v29-web.glb",
+  "bytes": 58014780,
+  "sha256": "db6b5194dc2bb61fb7c033389771bec3c96366d8fc44027c3a2c63a79d5541a1",
+  "parts": [
+    {
+      "file": "beam-field-v29-web.glb.01.bin",
+      "offset": 0,
+      "bytes": 16777216
+    },
+    {
+      "file": "beam-field-v29-web.glb.02.bin",
+      "offset": 16777216,
+      "bytes": 16777216
+    },
+    {
+      "file": "beam-field-v29-web.glb.03.bin",
+      "offset": 33554432,
+      "bytes": 16777216
+    },
+    {
+      "file": "beam-field-v29-web.glb.04.bin",
+      "offset": 50331648,
+      "bytes": 7683132
+    }
+  ]
+}

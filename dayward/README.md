@@ -1,7 +1,7 @@
 # DAYWARD assets
 
 The models, textures and placeholder portraits of the DAYWARD landing page, for its
-standalone HTML file. The layout is the project folder's own: `landing-page-v06/` is the page's
+standalone HTML file. The layout is the project folder's own: `landing-page-v07/` is the page's
 folder and `models/` sits next to it, so the page's relative URLs resolve against one base.
 
 A model over 20 MB (jsDelivr's ceiling per file) is stored as `name.glb.01.bin`, `02`, ... with
