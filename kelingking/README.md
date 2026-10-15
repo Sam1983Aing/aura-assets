@@ -4,7 +4,9 @@ Assets for the standalone build of Kelingking, a three.js scroll descent of Keli
 Nusa Penida. The page loads them from jsDelivr, pinned to a tag: `kelingking-v2` / `1.11.0` for the
 final version of the scene (v34), `kelingking-v1` / `1.10.0` for v11 and v12 (only the terrain changed
 between them), `kelingking-v3` / `1.15.0` for the landing page around it, which added `hero/`, and
-`kelingking-v4` / `1.16.0`, which added `lib/`.
+`kelingking-v4` / `1.16.0`, which added `lib/`, and `kelingking-v5` / `1.17.0`: the textures and the
+pictures as WebP (`.webp` beside the old `.jpg`/`.png`, which older tags still use) and a smaller
+terrain file (10.1 MB, was 13.6), for the landing page's download.
 
 - `textures/`: ground and path textures from Poly Haven, CC0 1.0, resized and repacked. The
   list is in `textures/CREDITS.md`.
